@@ -24,5 +24,21 @@ class FacebookBackend(ModelBackend):
                     
                 user.save()
 
+                profile = FacebookProfile.objects.get_or_create(user=user)
+
+                profile.uid = fb_user['id']
+                profile.name = fb_user['name']
+                profile.first_name = fb_user['first_name']
+                profile.middle_name = fb_user['middle_name']
+                profile.last_name = fb_user['last_name']
+                profile.link = fb_user['link']
+                profile.birthday = fb_user['birthday']
+                profile.hometown = fb_user['hometown']
+                profile.bio = fb_user['bio']
+                profile.gender = fb_user['gender']
+                profile.modified = fb_user['updated_time']
+
+                profile.save()
+
             return user
         return None
