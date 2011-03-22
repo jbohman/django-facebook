@@ -38,13 +38,28 @@ class FacebookBackend(ModelBackend):
 
                 profile.uid = fb_user['id']
                 profile.name = fb_user['name']
-                profile.first_name = fb_user['first_name']
-                profile.middle_name = fb_user['middle_name']
-                profile.last_name = fb_user['last_name']
-                profile.link = fb_user['link']
-                profile.hometown = fb_user['hometown']
-                profile.bio = fb_user['bio']
-                profile.gender = fb_user['gender']
+
+                if 'first_name' in fb_user:
+                    profile.first_name = fb_user['first_name']
+
+                if 'middle_name' in fb_user:
+                    profile.middle_name = fb_user['middle_name']
+
+                if 'last_name' in fb_user:
+                    profile.last_name = fb_user['last_name']
+
+                if 'link' in fb_user:
+                    profile.link = fb_user['link']
+
+                if 'hometown' in fb_user:
+                    profile.hometown = fb_user['hometown']['name']
+
+                if 'bio' in fb_user:
+                    profile.bio = fb_user['bio']
+
+                if 'gender' in fb_user:
+                    profile.gender = fb_user['gender']
+
                 profile.modified = fb_user['updated_time'].replace('T', ' ').replace('+', '.')
 
                 profile.save()
