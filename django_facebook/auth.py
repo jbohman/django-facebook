@@ -38,15 +38,12 @@ class FacebookBackend(ModelBackend):
 
                 profile.uid = fb_user['id']
                 profile.name = fb_user['name']
-
-                if 'first_name' in fb_user:
-                    profile.first_name = fb_user['first_name']
+                profile.first_name = fb_user['first_name']
+                profile.last_name = fb_user['last_name']
 
                 if 'middle_name' in fb_user:
                     profile.middle_name = fb_user['middle_name']
 
-                if 'last_name' in fb_user:
-                    profile.last_name = fb_user['last_name']
 
                 if 'link' in fb_user:
                     profile.link = fb_user['link']
