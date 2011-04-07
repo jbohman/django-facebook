@@ -55,7 +55,7 @@ class FacebookBackend(ModelBackend):
                     profile.bio = fb_user['bio']
 
                 if 'gender' in fb_user:
-                    profile.gender = fb_user['gender']
+                    profile.gender = fb_user['gender'][1].upper()
 
                 profile.modified = fb_user['updated_time'].replace('T', ' ').replace('+', '.')
 
