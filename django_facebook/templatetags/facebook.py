@@ -1,37 +1,27 @@
 from django import template
 from django.conf import settings
+
 register = template.Library()
 
 FACEBOOK_EXTENDED_PERMISSIONS = getattr(settings, 'FACEBOOK_EXTENDED_PERMISSIONS', [])
 
-@register.inclusion_tag('tags/facebook_load.html')
-def facebook_load():
-    pass
+@register.inclusion_tag('tags/facebook_js.html')
+def facebook_js():
+    app_id = getattr(settings, 'FACEBOOK_APP_ID', None)
+    api_key = getattr(settings, 'FACEBOOK_API_KEY', None)
+    perms = ','.join(FACEBOOK_EXTENDED_PERMISSIONS)
+    return {'facebook_app_id': app_id, 'facebook_api_key': api_key, 'facebook_req_perms': perms}
 
-@register.tag
-def facebook_init(parser, token):
-    nodelist = parser.parse(('endfacebook',))
-    parser.delete_first_token()
-    return FacebookNode(nodelist)
-
-class FacebookNode(template.Node):
-    """ Allow code to be added inside the facebook asynchronous closure. """
-    def __init__(self, nodelist):
-        try:
-            app_id = settings.FACEBOOK_APP_ID    
-        except AttributeError:
-            raise template.TemplateSyntaxError, "%r tag requires FACEBOOK_APP_ID to be configured." \
-                % token.contents.split()[0]
-        self.app_id   = app_id
-        self.nodelist = nodelist
-        
-    def render(self, context):
-        t = template.loader.get_template('tags/facebook_init.html')
-        code = self.nodelist.render(context)
-        custom_context = context
-        custom_context['code'] = code
-        custom_context['app_id'] = self.app_id
-        return t.render(context)
+@register.inclusion_tag('tags/facebook_button.html', takes_context=True)
+def facebook_button(context, button=None):
+    if not 'request' in context:
+        raise AttributeError, 'Please add the ``django.core.context_processors.request`` context processors to your settings.TEMPLATE_CONTEXT_PROCESSORS set'
+    logged_in = context['request'].user.is_authenticated()
+    if 'next' in context:
+        next = context['next']
+    else:
+        next = None
+    return dict(next=next, logged_in=logged_in, button=button, request=context['request'])
 
 @register.simple_tag
 def facebook_perms():

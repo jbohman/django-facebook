@@ -23,6 +23,7 @@ def facebook_login(request, template='facebook_error.html'):
     if request.facebook is not None:
         user = auth.authenticate(fb_uid=request.facebook.uid, fb_object=request.facebook)
         if user is not None and user.is_active:
+            auth.login(request, user)
             return HttpResponseRedirect(_get_next(request))
 
     return render_to_response(template, {},

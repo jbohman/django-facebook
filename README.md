@@ -19,6 +19,11 @@ the following settings:
     FACEBOOK_DEBUG_COOKIE = ''
     FACEBOOK_DEBUG_TOKEN = ''
 
+Urls:
+----
+Example:
+
+    (r'^facebook/', include('django_facebook.urls'))
 
 Templates:
 ---------
@@ -26,19 +31,11 @@ A few helpers for using the Javascript SDK can be enabled by adding
 this to your base template in the ``<head>`` section:
 
     {% load facebook %}
-    {% facebook_init %}
-      {% block facebook_code %}{% endblock %}
-    {% endfacebook %}
+    {% facebook_js %}
 
-And this should be added just before your ``</html>`` tag:
-
-    {% facebook_load %}
-    
-The ``facebook_load`` template tag inserts the code required to
-asynchronously load the facebook javascript SDK. The ``facebook_init``
-tag calls ``FB.init`` with your configured application settings. It is
-best to put your facebook related javascript into the ``facebook_code``
-region so that it can be called by the asynchronous handler.
+The ``facebook_js`` template tag inserts the code required to asynchronously
+load the facebook javascript SDK and calls ``FB.init`` with your configured
+application settings.
 
 You may find the ``facebook_perms`` tag useful, which takes the setting
 in FACEBOOK_EXTENDED_PERMISSIONS and prints the extended permissions out
