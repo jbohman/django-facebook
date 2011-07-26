@@ -59,11 +59,12 @@ class FacebookMiddleware(object):
             settings.FACEBOOK_APP_ID, settings.FACEBOOK_SECRET_KEY)
         request.facebook = DjangoFacebook(fb_user) if fb_user else None
 
-        if fb_user and request.user.is_anonymous():
-            user = auth.authenticate(fb_uid=fb_user['uid'], fb_object=request.facebook)
-            if user:
-                user.last_login = datetime.datetime.now()
-                user.save()
-                request.user = user
+        if settings.FACEBOOK_AUTOMATIC_LOGIN:
+            if fb_user and request.user.is_anonymous():
+                user = auth.authenticate(fb_uid=fb_user['uid'], fb_object=request.facebook)
+                if user:
+                    user.last_login = datetime.datetime.now()
+                    user.save()
+                    request.user = user
 
         return None

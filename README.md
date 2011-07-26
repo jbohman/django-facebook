@@ -13,6 +13,7 @@ the following settings:
     # Custom settings
     FACEBOOK_PREPOPULATE_USER_DATA = False
     FACEBOOK_EXTENDED_PERMISSIONS = []  # Ex: ['email', 'user_birthday']
+    FACEBOOK_AUTOMATIC_LOGIN = False
     
     # Optionally for debugging
     FACEBOOK_DEBUG_COOKIE = ''
