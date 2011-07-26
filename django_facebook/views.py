@@ -26,5 +26,4 @@ def facebook_login(request, template='facebook_error.html'):
             auth.login(request, user)
             return HttpResponseRedirect(_get_next(request))
 
-    return render_to_response(template, {},
-            context_instance=RequestContext(request))
+    return HttpResponseRedirect(_get_next(request))
