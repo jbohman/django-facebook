@@ -4,18 +4,18 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 
-def _get_fb_next(request):
+def _get_next(request):
     """
     Returns a url to redirect to after the login
     """
-    if 'fb_next' in request.session:
-        fb_next = request.session['fb_next']
-        del request.session['fb_next']
-        return fb_next
-    elif 'fb_next' in request.GET:
-        return request.GET.get('fb_next')
-    elif 'fb_next' in request.POST:
-        return request.POST.get('fb_next')
+    if 'next' in request.session:
+        next = request.session['next']
+        del request.session['next']
+        return next
+    elif 'next' in request.GET:
+        return request.GET.get('next')
+    elif 'next' in request.POST:
+        return request.POST.get('next')
     else:
         return getattr(settings, 'LOGIN_REDIRECT_URL', '/')
 
@@ -24,6 +24,6 @@ def facebook_login(request, template='facebook_error.html'):
         user = auth.authenticate(fb_uid=request.facebook.uid, fb_object=request.facebook)
         if user is not None and user.is_active:
             auth.login(request, user)
-            return HttpResponseRedirect(_get_fb_next(request))
+            return HttpResponseRedirect(_get_next(request))
 
-    return HttpResponseRedirect(_get_fb_next(request))
+    return HttpResponseRedirect('/')
