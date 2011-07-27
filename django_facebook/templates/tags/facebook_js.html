@@ -1,24 +1,26 @@
 <div id="fb-root"></div>
 <script type="text/javascript">
-  window.fbAsyncInit = function() {
+window.fbAsyncInit = function() {
     FB.init({
-      {% if facebook_app_id %} appId: '{{ facebook_app_id }}', {% endif %}
-      {% if facebook_api_key %} apiKey: '{{ facebook_api_key }}', {% endif %}
-      status: true, cookie: true, xfbml: true
+        {% if facebook_app_id %} appId: '{{ facebook_app_id }}', {% endif %}
+        {% if facebook_api_key %} apiKey: '{{ facebook_api_key }}', {% endif %}
+        status: true, cookie: true, xfbml: true
     });
-  };
+};
 
-  function facebookConnect(form){
-      function handleResponse(response){
-          form.submit();
-      }
-      FB.login(handleResponse{% if facebook_req_perms %}, {perms: '{{ facebook_req_perms }}' } {% endif %} );
-  };
+function facebookConnect(form){
+    function handleResponse(response){
+        if (response.session) {
+            form.submit();
+        }
+    }
+    FB.login(handleResponse{% if facebook_req_perms %}, {perms: '{{ facebook_req_perms }}' } {% endif %} );
+};
 
-  (function() {
+(function() {
     var e = document.createElement('script');
     e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
     e.async = true;
     document.getElementById('fb-root').appendChild(e);
-  }());
+}());
 </script>
