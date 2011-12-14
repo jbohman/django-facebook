@@ -4,17 +4,17 @@ window.fbAsyncInit = function() {
     FB.init({
         {% if facebook_app_id %} appId: '{{ facebook_app_id }}', {% endif %}
         {% if facebook_api_key %} apiKey: '{{ facebook_api_key }}', {% endif %}
-        status: true, cookie: true, xfbml: true
+        status: true, cookie: true, xfbml: true, oauth: true
     });
 };
 
 function facebookConnect(form){
     function handleResponse(response){
-        if (response.session) {
+        if (response.authResponse) {
             form.submit();
         }
     }
-    FB.login(handleResponse{% if facebook_req_perms %}, {perms: '{{ facebook_req_perms }}' } {% endif %} );
+    FB.login(handleResponse{% if facebook_req_perms %}, {scope: '{{ facebook_req_perms }}' } {% endif %});
 };
 
 (function() {
